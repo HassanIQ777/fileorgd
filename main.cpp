@@ -1,21 +1,21 @@
+#include "Globals.hpp"
 #include "helpers.hpp"
-#include <cstdlib>
-#include <iostream>
+#include "libutils/funcs.hpp"
 #include <libutils/funcs.hpp>
-#include <sched.h>
-#include <sys/wait.h>
 #include <unistd.h>
 
 int main() {
-  auto home = getProgramHome();
-  if (!File::isdirectory(home)) {
-    if (File::createdirs(home)) {
-      print("Created home directory.\n");
-    } else {
-      print("Failed to create home directory.\n");
-    }
-  } else {
-    print("Home directory already exists.\n");
+  daemonize();
+
+  Globals &g = Globals::getInstance();
+
+  g.files.program_dir = getProgramHome();
+  createHomeDir(g.files.program_dir);
+  g.files.assignPaths();
+  g.files.createFiles();
+  LOG("Program started with PID " + funcs::str(getpid()));
+
+  while (1) {
+    funcs::msleep(1000);
   }
-  print("Home directory: '", home, "'\n");
 }

@@ -1,7 +1,10 @@
+#include "Globals.hpp"
 #include "libutils/File.hpp"
 #include "libutils/funcs.hpp"
 #include <cstdlib>
 #include <filesystem>
+#include <libutils/funcs.hpp>
+#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -13,7 +16,29 @@ inline std::string getProgramHome() {
     return "";
   }
   // $HOME/.local/fileorgd/
-  return fs::absolute(std::string(home) / fs::path(".local/shared/fileorgd")).string();
+  return fs::absolute(std::string(home) / fs::path(".local/share/fileorgd"))
+      .string();
+}
+
+inline void createHomeDir(const std::string &path) {
+  if (!File::isdirectory(path)) {
+    if (File::createdirs(path)) {
+      print("Created home directory.\n");
+    } else {
+      print("Failed to create home directory.\n");
+    }
+  } else {
+    print("Home directory already exists.\n");
+  }
+}
+
+inline void LOG(const std::string &msg) {
+  Globals &g = Globals::getInstance();
+  if (!File::isfile(g.files.logs_file))
+    return;
+  auto date = funcs::currentTime();
+  std::string output = date + " -> " + msg;
+  File::appendline(g.files.logs_file, output);
 }
 
 inline void daemonize() {
