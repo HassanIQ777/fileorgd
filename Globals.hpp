@@ -10,10 +10,13 @@ using funcs::print;
 namespace fs = std::filesystem;
 
 struct FilePaths {
-  std::string program_dir; // directories
-  std::string logs_file, pid_file;   // files
+  std::string program_dir;         // directories
+  std::string logs_file, pid_file; // files
 
-  void assignPaths() { logs_file = fs::path(program_dir) / "logs.txt"; }
+  void assignPaths() {
+    logs_file = fs::path(program_dir) / "logs.txt";
+    pid_file = fs::path(program_dir) / ".pid";
+  }
   void createFiles() {
     if (!File::isfile(logs_file)) {
       File::createfile(logs_file);
