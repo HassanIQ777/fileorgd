@@ -27,10 +27,21 @@ struct FilePaths {
   }
 };
 
+struct Extensions {
+  const std::vector<std::string> video = {};
+  const std::vector<std::string> picture = {};
+  const std::vector<std::string> music = {};
+  const std::vector<std::string> apk = {};
+  const std::vector<std::string> pdf = {};
+  const std::vector<std::string> code = {};
+};
+
 struct Globals {
   std::string VERSION = "v26.9.5";
+  std::string orgdir;
   FilePaths files;
   CLIParser parser;
+  Extensions extensions;
 
   static Globals &getInstance() {
     static Globals g;
