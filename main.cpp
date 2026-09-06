@@ -1,8 +1,4 @@
-#include "Globals.hpp"
-#include "libutils/funcs.hpp"
 #include "organize.hpp"
-#include <sys/types.h>
-#include <unistd.h>
 
 int main(int argc, char **argv) {
   Globals &g = Globals::getInstance();

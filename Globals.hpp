@@ -3,32 +3,31 @@
 #include "libutils/CLIParser.hpp"
 #include "libutils/File.hpp"
 #include "libutils/funcs.hpp"
-#include <sys/types.h>
 
 using funcs::print;
-namespace fs = std::filesystem;
 
 struct FilePaths {
-  std::string program_dir;         // directories
-  std::string logs_file, pid_file; // files
+  std::string program_dir; // directories
+  std::string logs_file;   // files
 
   void assignPaths() {
     logs_file = fs::path(program_dir) / "logs.txt";
-    pid_file = fs::path(program_dir) / ".pid";
+    // pid_file = fs::path(program_dir) / ".pid";
   }
   void createFiles() {
     if (!File::isfile(logs_file)) {
       File::createfile(logs_file);
     }
-    if (!File::isfile(pid_file)) {
-      File::createfile(pid_file);
-    }
+    // if (!File::isfile(pid_file)) {
+    //   File::createfile(pid_file);
+    // }
   }
 };
 
 struct Extensions {
   const std::vector<std::string> apk = {".apk", ".xapk"};
-  const std::vector<std::string> code = { // C Family
+  const std::vector<std::string> code = {
+      // C Family
       ".c", ".h", ".cpp", ".cc", ".cxx", ".c++", ".hpp", ".hh", ".hxx", ".h++",
       ".m", ".mm",
 
@@ -168,7 +167,8 @@ struct Extensions {
       ".atrac", ".atrac3", ".atrac3plus", ".atrac3p", ".atrac3pa", ".atrac3al",
       ".atrac3pal", ".atrac3pa", ".atrac3p", ".atrac3plus", ".atrac"};
 
-  const std::vector<std::string> picture = { // Common & Modern Raster
+  const std::vector<std::string> picture = {
+      // Common & Modern Raster
       ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".pjpeg", ".pjp", ".png",
       ".apng", ".gif", ".webp", ".avif", ".heic", ".heif", ".bmp", ".dib",
       ".tif", ".tiff", ".jxl", ".qoi",
@@ -233,7 +233,7 @@ struct Extensions {
 };
 
 struct Globals {
-  std::string VERSION = "v26.9.6-2";
+  std::string VERSION = "v26.9.6-3";
   std::string orgdir;
   FilePaths files;
   CLIParser parser;

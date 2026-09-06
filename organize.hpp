@@ -1,11 +1,6 @@
 #pragma once
 
-#include "Globals.hpp"
 #include "helpers.hpp"
-#include "libutils/File.hpp"
-#include "libutils/funcs.hpp"
-#include <filesystem>
-#include <vector>
 
 // gets files only
 inline std::vector<std::string> getfiles(const std::string &dir) {

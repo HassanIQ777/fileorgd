@@ -1,14 +1,8 @@
+#pragma once
+
 #include "Globals.hpp"
-#include "libutils/File.hpp"
 #include "libutils/Log.hpp"
-#include "libutils/funcs.hpp"
-#include <csignal>
-#include <cstdlib>
-#include <string>
 #include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-using funcs::print;
 
 inline std::string getProgramHome() {
   auto home = getenv("HOME");
@@ -35,9 +29,10 @@ inline void createHomeDir(const std::string &path) {
 inline void LOG(const std::string &msg) {
   Globals &g = Globals::getInstance();
 
-  if (!File::isfile(g.files.logs_file))           { // if it doesn't exist,
-    if (!File::createfile(g.files.logs_file)) { // create it, if can't create it,
-      return;                                            // just forget about it
+  if (!File::isfile(g.files.logs_file)) { // if it doesn't exist,
+    if (!File::createfile(
+            g.files.logs_file)) { // create it, if can't create it,
+      return;                     // just forget about it
     }
   }
 
@@ -78,7 +73,7 @@ inline void parseArgs() {
     exit(0);
   } else if (first_arg == "-s") {
     LOG("Stopped program with -s argument");
-    kill(g.pid, SIGTERM);
+    system("pkill fileorgd"); // sorry this kills EVERY instance of the program
   }
 
   if (File::isdirectory(first_arg)) {
@@ -112,6 +107,4 @@ inline void daemonize() {
   close(STDERR_FILENO);
 }
 
-inline void handle_SIGTERM(int){
-  LOG("Received SIGTERM. Exiting program.");
-}
+inline void handle_SIGTERM(int) { LOG("Received SIGTERM. Exiting program."); }
