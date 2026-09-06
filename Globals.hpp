@@ -234,7 +234,7 @@ struct Extensions {
 };
 
 struct Globals {
-  std::string VERSION = "v26.9.5-2";
+  std::string VERSION = "v26.9.6";
   std::string orgdir;
   FilePaths files;
   CLIParser parser;

@@ -87,3 +87,7 @@ inline void organizeFiles() {
     LOG("Moved '" + file + "' to '" + fs::absolute(new_path).string() + "'");
   }
 }
+
+inline void removeEmptyDirs(){
+  const std::vector<std::string> dirs = {""};
+}
