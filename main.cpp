@@ -1,7 +1,7 @@
 #include "Globals.hpp"
-#include "helpers.hpp"
 #include "libutils/funcs.hpp"
 #include "organize.hpp"
+#include <filesystem>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
   g.parser.setArgs(argc, argv);
   g.files.program_dir = getProgramHome();
   createHomeDir(g.files.program_dir);
-  
+
   g.files.assignPaths();
   g.files.createFiles();
   parseArgs();
@@ -18,9 +18,15 @@ int main(int argc, char **argv) {
 
   pid_t pid = getpid();
   LOG("Program started with PID " + funcs::str(pid));
+  LOG("Organizing directory '" + fs::absolute(g.orgdir).string());
 
   while (1) {
-    createDirs();
     funcs::msleep(10000);
+    auto files = getfiles(g.orgdir);
+    if (files.empty()) {
+      continue;
+    }
+    createDirs();
+    organizeFiles();
   }
 }

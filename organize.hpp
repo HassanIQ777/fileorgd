@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Globals.hpp"
+#include "helpers.hpp"
 #include "libutils/File.hpp"
 #include "libutils/funcs.hpp"
+#include <filesystem>
 #include <vector>
 
 // gets files only
@@ -47,9 +49,9 @@ inline void createDirs() {
 
 inline bool shouldMoveFile(const std::string &filepath,
                            const std::vector<std::string> &extensions_list) {
-  auto ext = funcs::lowercase(File::getExtension(filepath));
+  auto file_ext = funcs::lowercase(File::getExtension(filepath));
   for (const auto &ext : extensions_list) {
-    if (funcs::lowercase(ext) == ext) {
+    if (funcs::lowercase(ext) == file_ext) {
       return true;
     }
   }
@@ -62,22 +64,26 @@ inline void organizeFiles() {
 
   auto files = getfiles(path);
   for (const auto &file : files) {
+    std::string filename = File::getFileName(file);
+    std::string destination = "Others";
     if (shouldMoveFile(file, g.extensions.picture)) {
-      File::movefile(file, path / "Pictures" / file);
+      destination = "Pictures";
     } else if (shouldMoveFile(file, g.extensions.video)) {
-      File::movefile(file, path / "Videos" / file);
+      destination = "Pictures";
     } else if (shouldMoveFile(file, g.extensions.music)) {
-      File::movefile(file, path / "Music" / file);
+      destination = "Music";
     } else if (shouldMoveFile(file, g.extensions.documents)) {
-      File::movefile(file, path / "Documents" / file);
+      destination = "Documents";
     } else if (shouldMoveFile(file, g.extensions.code)) {
-      File::movefile(file, path / "Code" / file);
+      destination = "Code";
     } else if (shouldMoveFile(file, g.extensions.apk)) {
-      File::movefile(file, path / "APK" / file);
+      destination = "APK";
     }
 
-    else {
-      File::movefile(file, path / "Others" / file);
-    }
+    fs::path new_path = path / destination / filename;
+
+    File::movefile(file, new_path);
+
+    LOG("Moved '" + file + "' to '" + fs::absolute(new_path).string() + "'");
   }
 }
