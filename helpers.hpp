@@ -36,8 +36,13 @@ inline void createHomeDir(const std::string &path) {
 
 inline void LOG(const std::string &msg) {
   Globals &g = Globals::getInstance();
-  if (!File::isfile(g.files.logs_file))
-    return;
+
+  if (!File::isfile(g.files.logs_file))           { // if it doesn't exist,
+    if (!File::createfile(g.files.logs_file)) { // create it, if can't create it,
+      return;                                            // just forget about it
+    }
+  }
+
   auto date = funcs::currentTime();
   std::string output = date + " -> " + msg;
   File::appendline(g.files.logs_file, output);
