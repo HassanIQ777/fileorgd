@@ -1,7 +1,6 @@
 #include "Globals.hpp"
 #include "libutils/funcs.hpp"
 #include "organize.hpp"
-#include <filesystem>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -16,8 +15,8 @@ int main(int argc, char **argv) {
   parseArgs();
   daemonize();
 
-  pid_t pid = getpid();
-  LOG("Program started with PID " + funcs::str(pid));
+  g.pid = getpid();
+  LOG("Program started with PID " + funcs::str(g.pid));
   LOG("Organizing directory '" + fs::absolute(g.orgdir).string());
 
   while (1) {
@@ -28,5 +27,6 @@ int main(int argc, char **argv) {
     }
     createDirs();
     organizeFiles();
+    removeEmptyDirs();
   }
 }

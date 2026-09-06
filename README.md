@@ -1,2 +1,2 @@
 # fileorgd
-Simple daemon that quickly sorts a directory's files.
+Simple daemon that quickly organizes a directory's files.

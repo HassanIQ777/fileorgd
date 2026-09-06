@@ -69,7 +69,7 @@ inline void organizeFiles() {
     if (shouldMoveFile(file, g.extensions.picture)) {
       destination = "Pictures";
     } else if (shouldMoveFile(file, g.extensions.video)) {
-      destination = "Pictures";
+      destination = "Vidoes";
     } else if (shouldMoveFile(file, g.extensions.music)) {
       destination = "Music";
     } else if (shouldMoveFile(file, g.extensions.documents)) {
@@ -88,6 +88,17 @@ inline void organizeFiles() {
   }
 }
 
-inline void removeEmptyDirs(){
-  const std::vector<std::string> dirs = {""};
+inline void removeEmptyDirs() {
+  Globals &g = Globals::getInstance();
+  fs::path path = g.orgdir;
+  const std::vector<std::string> dirs = {
+      "Others", "Pictures", "Vidoes", "Music", "Documents", "Code", "APK"};
+  for (const auto &dir : dirs) {
+    auto current_dir = path / dir;
+    if (getfiles(current_dir).empty()) {
+      if (File::removedir(current_dir)) {
+        LOG("Removed empty directory '" + current_dir.string() + "'");
+      }
+    }
+  }
 }

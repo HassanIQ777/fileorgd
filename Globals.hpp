@@ -3,8 +3,7 @@
 #include "libutils/CLIParser.hpp"
 #include "libutils/File.hpp"
 #include "libutils/funcs.hpp"
-#include <filesystem>
-#include <string>
+#include <sys/types.h>
 
 using funcs::print;
 namespace fs = std::filesystem;
@@ -234,11 +233,12 @@ struct Extensions {
 };
 
 struct Globals {
-  std::string VERSION = "v26.9.6";
+  std::string VERSION = "v26.9.6-2";
   std::string orgdir;
   FilePaths files;
   CLIParser parser;
   Extensions extensions;
+  pid_t pid;
 
   static Globals &getInstance() {
     static Globals g;

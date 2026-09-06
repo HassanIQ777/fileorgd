@@ -2,10 +2,8 @@
 #include "libutils/File.hpp"
 #include "libutils/Log.hpp"
 #include "libutils/funcs.hpp"
+#include <csignal>
 #include <cstdlib>
-#include <filesystem>
-#include <fstream>
-#include <libutils/funcs.hpp>
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -79,8 +77,8 @@ inline void parseArgs() {
     print("fileorgd version ", g.VERSION, "\n");
     exit(0);
   } else if (first_arg == "-s") {
-    std::ofstream file(g.files.pid_file, std::ios::trunc); // truncate file
-    std::system("pkill fileorgd");
+    LOG("Stopped program with -s argument");
+    kill(g.pid, SIGTERM);
   }
 
   if (File::isdirectory(first_arg)) {
@@ -112,4 +110,8 @@ inline void daemonize() {
   close(STDIN_FILENO);
   close(STDOUT_FILENO);
   close(STDERR_FILENO);
+}
+
+inline void handle_SIGTERM(int){
+  LOG("Received SIGTERM. Exiting program.");
 }
